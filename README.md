@@ -3,6 +3,9 @@ Graphics Module for Python 2.7
 
 ### (Python 3.5 release coming soon!)
 
+## Install
+`python setup.py install`
+
 **Creating an application is simple with PyGMod!**
 1.  Create a directory for your application
 2.  Create a file called `app.py`

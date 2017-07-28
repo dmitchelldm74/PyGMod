@@ -15,6 +15,9 @@ class Events():
         for c in self.click_events:
             if c.rect.collidepoint(pos):
                 c.click()
+                
+    def delete(self, obj):
+        self.click_events.pop(self.click_events.index(obj))
                   
     def draw(self):
         for c in self.click_events:

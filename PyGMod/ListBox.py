@@ -62,3 +62,8 @@ class ListBox(TextBox):
     def __getattr__(self, name):
         if name == 'value':
             return self.Selected.value
+        elif name == 'rect':
+            if self.textboxes != []:
+                return self.textboxes[-1].rect
+            return [0,0,0,0]
+            

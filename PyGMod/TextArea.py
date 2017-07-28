@@ -50,3 +50,7 @@ class TextArea(TextBox):
     def __getattr__(self, name):
         if name == 'value':
             return "\n".join([tb.value for tb in self.textboxes])
+        elif name == 'rect':
+            if self.textboxes != []:
+                return self.textboxes[-1].rect
+            return [0,0,0,0]

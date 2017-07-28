@@ -1,14 +1,21 @@
-from PyGMod import PyGModCore as gcore
+from PyGMod import alert, StyleChange, PyGModCore as gcore
 
 def finish(app):
-    print(app.getById("tb1").value)
+    alert(app.getById("tb1").value)
 
-app = gcore.Application("PyGraphics", 800, 800, (235,235,235))
-toggle = gcore.Toggle(lambda button: [button.set_color((20,200,20)), button.set_text("Go!")], lambda button: [button.set_color((200,20,20)), button.set_text("Stop!")])
-app.addElement("button", id="btn1", text="Stop!", onClick=toggle.change, bg=(200,20,20), rounded=1.0)
-app.getById("btn1").resize(700,80)
-app.addElement("button", id="btn2", text="Blue", bg=(20,20,200), rounded=1.0)
-app.deleteElement("btn2")
-app.addElement("textarea", id="tb1", text="Name\nEmail\nDate")
+def btn1_onclick(btn):
+    global app
+    btn.set_color((100,100,200))
+    app.getById("tb1").clear()
+    stylechange = StyleChange(btn)
+    stylechange.wait(1.0, set_color=((200,20,20), ))
+    
+def tb1_onSubmit(tb):
+    global app
+    app.set_title(tb.value)
+
+app = gcore.Application("title", 300, 300)
+app.addElement("textbox", id="tb1", text="Name", onSubmit=tb1_onSubmit)
+app.addElement("button", id="btn1", text="Clear", onClick=btn1_onclick, bg=(200,20,20), rounded=1.0)
 app.onFinish = finish
 app.loop()

@@ -5,6 +5,7 @@ from Button import *
 from TextArea import *
 from ListBox import *
 from EventManager import *
+from Label import *
 from objects import Toggle
 
 pygame.init()
@@ -41,22 +42,26 @@ class Application():
     def addElement(self, elname, **kwargs):
         elname = elname.lower()
         if len(self.objects) != 0:
-                size = self.objects[-1]
-                self.y = size.rect[1] + size.rect[3] + self.spacing
+            size = self.objects[-1]
+            self.y = size.rect[1] + size.rect[3] + self.spacing
         if elname == "button":
-            self.objects.append(Button(self.scr, (self.x, self.y, self.rely-(self.relx*2), self.relx), kwargs.get("text", "None"), kwargs.get("onClick", lambda btn:None), kwargs.get("bg",(200,200,200)), kwargs.get("rounded", 0), kwargs.get("font", "freesansbold.ttf"), fg=kwargs.get("fg", (255,255,255)), event_manager=self.evt))
+            self.objects.append(Button(self.scr, (self.x, self.y, self.rely-(self.relx*2), kwargs.get("h", self.relx)), kwargs.get("text", "None"), kwargs.get("onClick", lambda btn:None), kwargs.get("bg",(200,200,200)), kwargs.get("rounded", 0), kwargs.get("font", "freesansbold.ttf"), fg=kwargs.get("fg", (255,255,255)), event_manager=self.evt))
         elif elname == "textbox":
-            self.objects.append(TextBox(self.scr, (self.x, self.y, self.rely-(self.relx*2), self.relx), kwargs.get("text", "None"), onSubmit=kwargs.get("onSubmit", lambda btn:None), color=kwargs.get("bg",(200,200,200)), font=kwargs.get("font", "freesansbold.ttf"), focus_color=kwargs.get("focus_color", (170,170,170)), fg=kwargs.get("fg", (255,255,255)), value=kwargs.get("value",""), event_manager=self.evt))
+            self.objects.append(TextBox(self.scr, (self.x, self.y, self.rely-(self.relx*2), kwargs.get("h", self.relx)), kwargs.get("text", "None"), onSubmit=kwargs.get("onSubmit", lambda btn:None), color=kwargs.get("bg",(200,200,200)), font=kwargs.get("font", "freesansbold.ttf"), focus_color=kwargs.get("focus_color", (170,170,170)), fg=kwargs.get("fg", (255,255,255)), value=kwargs.get("value",""), event_manager=self.evt))
         elif elname == "listbox":
-            self.objects.append(ListBox(self.scr, (self.x, self.y, self.rely-(self.relx*2), self.relx), kwargs.get("text", "None"), onSubmit=kwargs.get("onSubmit", lambda btn:None), color=kwargs.get("bg",(200,200,200)), font=kwargs.get("font", "freesansbold.ttf"), focus_color=kwargs.get("focus_color", (100,100,200)), fg=kwargs.get("fg", (255,255,255)), value=kwargs.get("value",""), lines=kwargs.get("lines", 3), event_manager=self.evt))
+            self.objects.append(ListBox(self.scr, (self.x, self.y, self.rely-(self.relx*2), kwargs.get("h", self.relx)), kwargs.get("text", "None"), onSubmit=kwargs.get("onSubmit", lambda btn:None), color=kwargs.get("bg",(200,200,200)), font=kwargs.get("font", "freesansbold.ttf"), focus_color=kwargs.get("focus_color", (100,100,200)), fg=kwargs.get("fg", (255,255,255)), value=kwargs.get("value",""), lines=kwargs.get("lines", 3), event_manager=self.evt))
         elif elname == "textarea":
-            self.objects.append(TextArea(self.scr, (self.x, self.y, self.rely-(self.relx*2), self.relx), kwargs.get("text", "None"), onSubmit=kwargs.get("onSubmit", lambda btn:None), color=kwargs.get("bg",(200,200,200)), font=kwargs.get("font", "freesansbold.ttf"), focus_color=kwargs.get("focus_color", (170,170,170)), fg=kwargs.get("fg", (255,255,255)), value=kwargs.get("value",""), lines=kwargs.get("lines", 3), event_manager=self.evt))
+            self.objects.append(TextArea(self.scr, (self.x, self.y, self.rely-(self.relx*2), kwargs.get("h", self.relx)), kwargs.get("text", "None"), onSubmit=kwargs.get("onSubmit", lambda btn:None), color=kwargs.get("bg",(200,200,200)), font=kwargs.get("font", "freesansbold.ttf"), focus_color=kwargs.get("focus_color", (170,170,170)), fg=kwargs.get("fg", (255,255,255)), value=kwargs.get("value",""), lines=kwargs.get("lines", 3), event_manager=self.evt))
+        elif elname == "label":
+            self.objects.append(Label(self.scr, (self.x, self.y, self.rely-(self.relx*2), kwargs.get("h", self.relx)), kwargs.get("text", "None"), kwargs.get("onClick", lambda btn:None), kwargs.get("font", "freesansbold.ttf"), fg=kwargs.get("fg", (0,0,0)), event_manager=self.evt))
         else:
             return
         self.id_map[kwargs.get("id","_temp")] = len(self.objects)-1
         
     def deleteElement(self, id):
-        del self.objects[self.id_map[id]]
+        loc = self.id_map[id]
+        self.evt.delete(self.objects[loc])
+        del self.objects[loc]
             
     def getById(self, id):
         return self.objects[self.id_map[id]]
@@ -80,6 +85,9 @@ class Application():
                 self.inLoop()        
             self.evt.draw()
             pygame.display.flip()
+            
+    def exit(self):
+        self.Running = False
 
 #tbi = pygame.image.load("textbox.png")
 #tbi = pygame.transform.scale(tbi, (tb.rect[2], tb.rect[3]))

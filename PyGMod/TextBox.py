@@ -92,8 +92,14 @@ class TextBox():
             return 
         raise ValueError("Value must be a tuple with three elements, each less than or equal to 255. (R,G,B)")  
         
-    def get_color(self):
-        return self.color
+    def get_color(self, TYPE="BG"):
+        if TYPE == "BG":
+            return self.back_color
+        elif TYPE == "FG":
+            return self.fg
+        elif TYPE == "FC":
+            return self.focus_color
+        return (0,0,0)
         
     def clear(self):
         self.text = self.placeholder
